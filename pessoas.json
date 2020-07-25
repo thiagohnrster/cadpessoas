@@ -1,0 +1,22 @@
+[
+	{
+		"nome": "Thiago",
+		"idade": 36,
+		"pais": "Brasil"
+	},
+	{
+		"nome": "Bruno",
+		"idade": 37,
+		"pais": "Brasil"
+	},
+	{
+		"nome": "Vitor",
+		"idade": 32,
+		"pais": "Brasil"
+	},
+	{
+		"nome": "Pablo",
+		"idade": 24,
+		"pais": "Uruguai"
+	}
+]

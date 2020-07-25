@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-cloak>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<title>{{ tpTitulo }}</title>
+</head>
+<body ng-controller="cadPessoas">
+	<div class="container">
+		<div class="py-4">
+			<div class="jumbotron">
+				<h1 class="display-4 text-center">{{ tpTitulo }}</h1>
+				<div class="row mt-4 justify-content-center">	
+					<div class="col-lg-auto col-sm-6 my-2">	
+						<a href="javascript:;" ng-click="exibirFormInclusao=!exibirFormInclusao" role="button" class="btn btn-block btn-primary btn-lg"><span class="btn-flex"><i class="icon fas fa-user-plus"></i><strong class="btn-text">Incluir Pessoa</strong></span></a>
+					</div>
+					<div class="col-lg-auto col-sm-6 my-2">	
+						<button type="button" ng-disabled="carregandoPessoas" ng-click="carregarPessoas()" class="btn btn-block btn-secondary btn-lg">
+							<span class="btn-flex"><i ng-if="!carregandoPessoas" class="icon fa fa-redo"></i><i ng-if="carregandoPessoas" class="fas fa-circle-notch fa-spin fa-fw"></i><strong class="btn-text">{{ btnCarrgarPessoasText }}</strong></span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="container-row">
+				<div ng-if="!exibirFormInclusao && !carregandoPessoas && listaPessoas.length === 0" class="panel-empty">
+					<div class="row">	
+						<div class="col">	
+							<i class="icon fas fa-user"></i>
+							<div class="panel-empty-text">
+								<span>Nenhuma pessoa cadastrada.</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-show="exibirFormInclusao" class="row">
+					<div class="col">
+						<div class="card">
+							<h6 class="card-header font-weight-bold">Inclusão de Pessoa</h6>
+							<div class="card-body">
+								<form>
+									<div class="form-group">
+										<label class="font-weight-light">Nome</label>
+										<input type="text" ng-model="frmInclusao.nome" class="form-control" />
+									</div>
+									<div class="form-group">
+										<label class="font-weight-light">Idade</label>
+										<input type="text" ng-model="frmInclusao.idade" class="form-control" />
+									</div>
+									<div class="form-group">
+										<label class="font-weight-light">País</label>
+										<input type="text" ng-model="frmInclusao.pais" class="form-control" />
+									</div>
+									<div class="form-group row justify-content-end mb-0">
+										<div class="col-sm-auto col-md-auto mt-3">
+											<button type="reset" ng-click="exibirFormInclusao = false" class="btn btn-block btn-secondary">
+												<span class="btn-flex"><i class="icon fas fa-times"></i><strong class="btn-text">Cancelar</strong></span>
+											</button>
+										</div>	
+										<div class="col-sm-auto col-md-auto mt-3">
+											<button type="button" ng-click="incluirPessoa()" ng-disabled="frmInclusao.nome === '' || frmInclusao.idade === '' || frmInclusao.pais === ''" class="btn btn-block btn-primary">
+												<span class="btn-flex"><i class="icon fas fa-check"></i><strong class="btn-text">Incluir</strong></span>
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-show="listaPessoas.length > 0" class="row">
+					<div class="col">
+						<div class="card">
+							<h6 class="card-header font-weight-bold">Lista de Pessoas</h6>
+							<div class="card-body pt-3">
+								<div class="form-group row mb-0">
+									<div class="col">
+										<div class="row justify-content-between">
+											<div class="d-inline-flex flex-align-items-center col-sm-auto col-md-auto mb-3">
+												<label class="form-check form-check-inline my-0">
+													<input type="checkbox" ng-model="allSelected" ng-model-options="{getterSetter: true}" class="form-check-input mr-2" />Selecionar tudo
+												</label>
+											</div>
+											<div ng-show="excluirTudoBtn" class="col-sm-auto col-md-auto mb-3">
+												<button type="button" ng-click="excluirSelecionado()" class="btn btn-block btn-danger">
+													<span class="btn-flex"><i class="icon fas fa-trash-alt"></i><strong class="btn-text">Excluir selecionada(s)</strong></span>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<ul class="card-list">
+									<li ng-repeat="pessoa in listaPessoas">
+										<div class="card">
+											<label class="card-header align-items-center">
+												<span class="form-check form-check-inline font-weight-bold"><input type="checkbox" ng-model="pessoa.selected" class="form-check-input mr-2" />{{ pessoa.nome }}</span>
+											</label>
+											<div class="card-body">
+												<div class="row">
+													<div class="col">
+														<div class="row justify-content-between mx-0">
+															<ul class="col-sm-auto col-md-auto">
+																<li><strong>Idade:</strong> {{ pessoa.idade }}</li>
+																<li><strong>País:</strong> {{ pessoa.pais }}</li>
+															</ul>
+															<div id="removeItem" class="col-sm-auto col-md-auto px-0">
+																<a href="javascript:;" title="Excluir" ng-click="excluirPessoa($index)" class="btn btn-block btn-sm btn-danger">
+																	<span class="btn-flex"><i class="icon fas fa-user-times"></i><strong class="btn-text">Excluir</strong></span>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+	<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/angular/controllers/cadPessoasCtrl.js"></script>
+</body>
+</html>
