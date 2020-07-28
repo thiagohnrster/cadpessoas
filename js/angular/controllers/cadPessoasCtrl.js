@@ -2,19 +2,21 @@
  * @Author: Thiago
  * @Date:   2020-07-22 16:38:31
  * @Last Modified by:   Thiago
- * @Last Modified time: 2020-07-25 01:39:26
+ * @Last Modified time: 2020-07-28 20:47:06
  */
-angular.module('app', [])
-    .controller('cadPessoas', function($rootScope, $scope, $http) {
+angular.module('app', []).run(function ($rootScope) {
         $rootScope.tpTitulo = 'Cadastro de Pessoas';
-        $scope.btnCarrgarPessoasText = 'Carregar Pessoas';
+        $rootScope.btnCarrgarPessoasText = 'Carregar Pessoas';
+        $rootScope.carregandoPessoas = false;
+        $rootScope.listaPessoas = [];
+        $rootScope.exibirFormInclusao = false;
+    })
+    .controller('CadPessoas', function($rootScope, $scope, $http) {
         $scope.frmInclusao = {
             "nome": "",
             "idade": "",
             "pais": ""
         };
-        $scope.exibirFormInclusao = false;
-        $scope.listaPessoas = [];
         $scope.excluirTudoBtn = false;
 
         $scope.incluirPessoa = function() {
@@ -27,7 +29,7 @@ angular.module('app', [])
             $scope.frmInclusao.nome = '';
             $scope.frmInclusao.idade = '';
             $scope.frmInclusao.pais = '';
-            $scope.exibirFormInclusao = false;
+            $rootScope.exibirFormInclusao = false;
         };
 
         $scope.excluirPessoa = function($index) {
@@ -73,23 +75,24 @@ angular.module('app', [])
                 return getAllSelected();
             }
         };
-
-        $scope.carregarPessoas = function() {
-        	$scope.exibirFormInclusao = false;
-            $scope.btnCarrgarPessoasText = 'Carregando...'
-            $scope.carregandoPessoas = true;
-            $scope.listaPessoas = [];
+    })
+    .controller('ListaPessoas', function ($rootScope, $scope, $http) {
+        $rootScope.carregarPessoas = function() {
+            $rootScope.exibirFormInclusao = false;
+            $rootScope.btnCarrgarPessoasText = 'Carregando...'
+            $rootScope.carregandoPessoas = true;
+            $rootScope.listaPessoas = [];
         
             $http({
                 url: 'pessoas.json',
                 method: 'GET'
             }).then(function(resposta) {
-                $scope.listaPessoas = resposta.data;
+                $rootScope.listaPessoas = resposta.data;
             }, function(resposta) {
                 alert('Aconteceu um erro!');
             }).finally(function() {
-                $scope.btnCarrgarPessoasText = 'Carregar Pessoas';
-                $scope.carregandoPessoas = false;
+                $rootScope.btnCarrgarPessoasText = 'Carregar Pessoas';
+                $rootScope.carregandoPessoas = false;
             });
         };
     });

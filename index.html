@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<title>{{ tpTitulo }}</title>
 </head>
-<body ng-controller="cadPessoas">
+<body>
 	<div class="container">
 		<div class="py-4">
 			<div class="jumbotron">
@@ -18,13 +18,13 @@
 						<a href="javascript:;" ng-click="exibirFormInclusao=!exibirFormInclusao" role="button" class="btn btn-block btn-primary btn-lg"><span class="btn-flex"><i class="icon fas fa-user-plus"></i><strong class="btn-text">Incluir Pessoa</strong></span></a>
 					</div>
 					<div class="col-lg-auto col-sm-6 my-2">	
-						<button type="button" ng-disabled="carregandoPessoas" ng-click="carregarPessoas()" class="btn btn-block btn-secondary btn-lg">
+						<button type="button" ng-disabled="carregandoPessoas" ng-click="$root.carregarPessoas()" class="btn btn-block btn-secondary btn-lg">
 							<span class="btn-flex"><i ng-if="!carregandoPessoas" class="icon fa fa-redo"></i><i ng-if="carregandoPessoas" class="fas fa-circle-notch fa-spin fa-fw"></i><strong class="btn-text">{{ btnCarrgarPessoasText }}</strong></span>
 						</button>
 					</div>
 				</div>
 			</div>
-			<div class="container-row">
+			<div ng-controller="CadPessoas" class="container-row">
 				<div ng-if="!exibirFormInclusao && !carregandoPessoas && listaPessoas.length === 0" class="panel-empty">
 					<div class="row">	
 						<div class="col">	
@@ -35,8 +35,8 @@
 						</div>
 					</div>
 				</div>
-				<div ng-show="exibirFormInclusao" class="row">
-					<div class="col">
+				<div class="row">
+					<div ng-show="exibirFormInclusao" class="col">
 						<div class="card">
 							<h6 class="card-header font-weight-bold">Inclusão de Pessoa</h6>
 							<div class="card-body">
@@ -70,8 +70,8 @@
 						</div>
 					</div>
 				</div>
-				<div ng-show="listaPessoas.length > 0" class="row">
-					<div class="col">
+				<div ng-controller="ListaPessoas" class="row">
+					<div ng-show="listaPessoas.length > 0" class="col">
 						<div class="card">
 							<h6 class="card-header font-weight-bold">Lista de Pessoas</h6>
 							<div class="card-body pt-3">
