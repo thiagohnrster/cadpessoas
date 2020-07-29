@@ -2,9 +2,9 @@
  * @Author: Thiago
  * @Date:   2020-07-22 16:38:31
  * @Last Modified by:   Thiago
- * @Last Modified time: 2020-07-28 20:47:06
+ * @Last Modified time: 2020-07-29 17:08:01
  */
-angular.module('app', []).run(function ($rootScope) {
+angular.module('app', ['listaPessoas']).run(function ($rootScope) {
         $rootScope.tpTitulo = 'Cadastro de Pessoas';
         $rootScope.btnCarrgarPessoasText = 'Carregar Pessoas';
         $rootScope.carregandoPessoas = false;
@@ -20,6 +20,7 @@ angular.module('app', []).run(function ($rootScope) {
         $scope.excluirTudoBtn = false;
 
         $scope.incluirPessoa = function() {
+            $rootScope.exibirFormInclusao = false;
             $scope.listaPessoas.push({
                 nome: $scope.frmInclusao.nome,
                 idade: $scope.frmInclusao.idade,
@@ -29,7 +30,6 @@ angular.module('app', []).run(function ($rootScope) {
             $scope.frmInclusao.nome = '';
             $scope.frmInclusao.idade = '';
             $scope.frmInclusao.pais = '';
-            $rootScope.exibirFormInclusao = false;
         };
 
         $scope.excluirPessoa = function($index) {
@@ -74,25 +74,5 @@ angular.module('app', []).run(function ($rootScope) {
             } else {
                 return getAllSelected();
             }
-        };
-    })
-    .controller('ListaPessoas', function ($rootScope, $scope, $http) {
-        $rootScope.carregarPessoas = function() {
-            $rootScope.exibirFormInclusao = false;
-            $rootScope.btnCarrgarPessoasText = 'Carregando...'
-            $rootScope.carregandoPessoas = true;
-            $rootScope.listaPessoas = [];
-        
-            $http({
-                url: 'pessoas.json',
-                method: 'GET'
-            }).then(function(resposta) {
-                $rootScope.listaPessoas = resposta.data;
-            }, function(resposta) {
-                alert('Aconteceu um erro!');
-            }).finally(function() {
-                $rootScope.btnCarrgarPessoasText = 'Carregar Pessoas';
-                $rootScope.carregandoPessoas = false;
-            });
         };
     });
